@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cn.enaium.vac.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ClientConnectionMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "CreditsScreenMixin",
+    "EntityMixin",
+    "EntityRendererMixin",
+    "GameRendererMixin",
+    "IClientPlayerInteractionManagerMixin",
+    "IKeyBindingMixin",
+    "IMinecraftClientMixin",
+    "InGameHudMixin",
+    "ItemEntityRendererMixin",
+    "IWorldRendererMixin",
+    "KeyboardMixin",
+    "MinecraftClientMixin",
+    "ScreenMixin",
+    "SignEditScreenMixin",
+    "TitleScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

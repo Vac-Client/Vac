@@ -1,0 +1,13 @@
+[C]§f============
+[C]§eVac Client
+[C]§f============
+
+§7Client Creator
+§f          Enaium  https://github.com/Enaium
+
+§7Credit
+§f          Enaium  Epsilon
+§e          https://github.com/Enaium-FabricMC/Epsilon
+
+§f          Alexander01998  Wurst
+§e          https://github.com/Wurst-Imperium/Wurst7
