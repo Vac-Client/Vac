@@ -33,19 +33,20 @@ class AltScreen : Screen(LiteralText("")) {
         super.init()
         usernameField = TextFieldWidget(textRenderer, width / 2 - 250 / 2, 5, 250, 20, LiteralText(""))
         passwordField = TextFieldWidget(textRenderer, width / 2 - 250 / 2, 35, 250, 20, LiteralText(""))
-        addButton(ButtonWidget(width / 2 - 250 / 2, 40 * 3, 250, 20, LiteralText("Login")) {
+        addDrawable(ButtonWidget(width / 2 - 250 / 2, 40 * 3, 250, 20, LiteralText("Login")) {
             login()
         })
-        addButton(ButtonWidget(width / 2 - 250 / 2, 40 * 3 + 25 * 2, 250, 20, LiteralText("Back")) {
+        addDrawable(ButtonWidget(width / 2 - 250 / 2, 40 * 3 + 25 * 2, 250, 20, LiteralText("Back")) {
             mc.openScreen(null)
         })
-        children.addAll(arrayOf(usernameField, passwordField))
+        addDrawable(usernameField)
+        addDrawable(passwordField)
     }
 
     override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrixStack)
-        drawCenteredString(matrixStack, textRenderer, "Username:", width / 2 - 250 / 2 - 50, 5, -1)
-        drawCenteredString(matrixStack, textRenderer, "Password:", width / 2 - 250 / 2 - 50, 35, -1)
+        drawCenteredText(matrixStack, textRenderer, "Username:", width / 2 - 250 / 2 - 50, 5, -1)
+        drawCenteredText(matrixStack, textRenderer, "Password:", width / 2 - 250 / 2 - 50, 35, -1)
         usernameField.render(matrixStack, mouseX, mouseY, delta)
         passwordField.render(matrixStack, mouseX, mouseY, delta)
 

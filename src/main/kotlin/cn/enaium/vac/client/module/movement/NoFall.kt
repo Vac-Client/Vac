@@ -15,6 +15,6 @@ class NoFall {
     @Event
     fun on(motioningEvent: MotioningEvent) {
         if (mc.player!!.fallDistance <= 2) return
-        mc.player!!.networkHandler.sendPacket(PlayerMoveC2SPacket(true))
+        mc.player!!.networkHandler.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(true))
     }
 }

@@ -20,7 +20,7 @@ class Design : Screen(LiteralText("")) {
         panel.clear()
         val filter = CF4M.MODULE.all.filter { it.instance is UI }
         filter.forEach { panel.add(Panel(it.instance as UI)) }
-        addButton(ButtonWidget(width - 50, height - 20, 50, 20, LiteralText("Reset")) {
+        addDrawable(ButtonWidget(width - 50, height - 20, 50, 20, LiteralText("Reset")) {
             filter.forEach {
                 val ui = it.instance as UI
                 ui.x = ui.defaultX

@@ -235,7 +235,7 @@ object Render2DUtil {
         RenderSystem.enableBlend()
         RenderSystem.disableTexture()
         RenderSystem.defaultBlendFunc()
-        bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR)
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
         bufferBuilder.vertex(matrix4f, x1.toFloat(), y2.toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix4f, x2.toFloat(), y2.toFloat(), 0.0f).color(g, h, k, f).next()
         bufferBuilder.vertex(matrix4f, x2.toFloat(), y1.toFloat(), 0.0f).color(g, h, k, f).next()
@@ -312,7 +312,7 @@ object Render2DUtil {
         vEnd: Float
     ) {
         val bufferBuilder = Tessellator.getInstance().buffer
-        bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE)
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
         bufferBuilder.vertex(xStart, yEnd, z).texture(uStart, vEnd).next()
         bufferBuilder.vertex(xEnd, yEnd, z).texture(uEnd, vEnd).next()
         bufferBuilder.vertex(xEnd, yStart, z).texture(uEnd, vStart).next()

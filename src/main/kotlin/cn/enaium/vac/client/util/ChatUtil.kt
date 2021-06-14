@@ -1,6 +1,7 @@
 package cn.enaium.vac.client.util
 
 import cn.enaium.cf4m.CF4M
+import cn.enaium.cf4m.configuration.CommandConfiguration
 import cn.enaium.vac.client.VAC_NAME
 import cn.enaium.vac.client.mc
 import net.minecraft.text.LiteralText
@@ -20,14 +21,14 @@ object ChatUtil {
     private val error: String = "[" + Formatting.RED + "error" + Formatting.WHITE + "] "
 
     fun error(string: String) {
-        CF4M.CONFIGURATION.command.message(error + string)
+        CF4M.CONFIGURATION.getByClass(CommandConfiguration::class.java).message(error + string)
     }
 
     fun warning(string: String) {
-        CF4M.CONFIGURATION.command.message(warning + string)
+        CF4M.CONFIGURATION.getByClass(CommandConfiguration::class.java).message(warning + string)
     }
 
     fun success(string: String) {
-        CF4M.CONFIGURATION.command.message(success + string)
+        CF4M.CONFIGURATION.getByClass(CommandConfiguration::class.java).message(success + string)
     }
 }

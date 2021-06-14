@@ -22,5 +22,6 @@ class ModeSetting(var current: String, val modes: ArrayList<String>) {
 class ChatListSetting(var all: ArrayList<Pair<Int, String>>)
 open class ItemListSetting(var all: ArrayList<String>)
 class BlockListSetting(all: ArrayList<String>) : ItemListSetting(all)
+class BlockEntityListSetting(all: ArrayList<String>) : ItemListSetting(all)
 class EntityListSetting(var all: ArrayList<String>)
 class StringSetting(var current: String)

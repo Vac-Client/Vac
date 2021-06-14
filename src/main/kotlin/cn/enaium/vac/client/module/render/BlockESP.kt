@@ -38,8 +38,6 @@ class BlockESP : Render(BoxType.BLOCK, DrawType.OUTLINE) {
 
     private val searchedChuck = Collections.synchronizedSet(HashSet<Chunk>())
 
-    private var onced = false
-
     @Event
     fun onMotion(motioningEvent: MotioningEvent) {
         val chunks = ArrayList<Chunk>()
@@ -91,7 +89,7 @@ class BlockESP : Render(BoxType.BLOCK, DrawType.OUTLINE) {
     fun onRender(render3DEvent: Render3DEvent) {
         poss.forEach {
             try {
-                drawBox(BlockUtil.getBoundingBox(it), Color.PINK, this)
+                drawBox(render3DEvent.matrixStack, BlockUtil.getBoundingBox(it), Color.PINK, this)
             } catch (e: UnsupportedOperationException) {
 
             }

@@ -13,12 +13,7 @@ import cn.enaium.vac.client.setting.*
 import cn.enaium.vac.client.util.RotationUtil
 import cn.enaium.vac.client.util.TargetUtil
 import net.minecraft.entity.Entity
-import net.minecraft.entity.ExperienceOrbEntity
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.projectile.PersistentProjectileEntity
-import net.minecraft.server.network.ServerPlayNetworkHandler
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import org.lwjgl.glfw.GLFW
 import java.util.stream.Stream
@@ -73,7 +68,7 @@ class Aura {
 
     @Event
     fun onMotion(motioningEvent: MotioningEvent) {
-        CF4M.MODULE.getByInstance(this).getExtend<Mod>().tag = priority.current
+        CF4M.MODULE.getByInstance(this).getExtend(Mod::class.java).tag = priority.current
 
         if (mc.player!!.getAttackCooldownProgress(0f) < 1) return
 
@@ -106,6 +101,11 @@ class Aura {
     @Event
     fun onMotion(motionedEvent: MotionedEvent) {
         if (target == null) return
+
+        val critical = CF4M.MODULE.getByClass(Critical::class.java)
+        if (critical.enable) {
+            (critical.instance as Critical).critical()
+        }
 
         mc.interactionManager!!.attackEntity(mc.player, target)
         mc.player!!.swingHand(Hand.MAIN_HAND)

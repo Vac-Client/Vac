@@ -23,7 +23,7 @@ class EditValue(val setting: SettingProvider) : Screen(LiteralText("")) {
     override fun init() {
         textFieldWidget =
             TextFieldWidget(mc.textRenderer, width / 2 - 25, height / 2 - 10, 50, 20, LiteralText(""))
-        addButton(ButtonWidget(width / 2 - 25, height / 2 + 20, 50, 20, ScreenTexts.DONE) {
+        addDrawable(ButtonWidget(width / 2 - 25, height / 2 + 20, 50, 20, ScreenTexts.DONE) {
             try {
                 when (val s = setting.getSetting<Any>()) {
                     is FloatSetting -> {
@@ -58,7 +58,7 @@ class EditValue(val setting: SettingProvider) : Screen(LiteralText("")) {
             }
             mc.openScreen(ClickGUI())
         })
-        addChild(textFieldWidget)
+        addDrawable(textFieldWidget)
         super.init()
     }
 

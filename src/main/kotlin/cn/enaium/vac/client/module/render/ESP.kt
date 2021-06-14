@@ -22,7 +22,7 @@ class ESP : Render(BoxType.ENTITY, DrawType.OUTLINE) {
     fun onRender(render3DEvent: Render3DEvent) {
         TargetUtil.getEntities().forEach {
             if (it == mc.player) return@forEach
-            drawBox(it, render3DEvent.tickDelta, Color.CYAN, this)
+            drawBox(render3DEvent.matrixStack, it.boundingBox, Color.CYAN, this)
         }
     }
 }

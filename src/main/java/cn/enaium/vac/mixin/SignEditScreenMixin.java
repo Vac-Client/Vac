@@ -2,6 +2,7 @@ package cn.enaium.vac.mixin;
 
 import cn.enaium.cf4m.CF4M;
 import cn.enaium.cf4m.provider.ModuleProvider;
+import cn.enaium.vac.client.module.player.AutoSign;
 import cn.enaium.vac.client.setting.StringSetting;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import org.spongepowered.asm.mixin.Final;
@@ -33,7 +34,7 @@ public abstract class SignEditScreenMixin {
 
     @Inject(at = @At("HEAD"), method = "init")
     private void init(CallbackInfo ci) {
-        ModuleProvider autoSign = CF4M.MODULE.getByName("AutoSign");
+        ModuleProvider autoSign = CF4M.MODULE.getByClass(AutoSign.class);
         if (autoSign.getEnable()) {
             String[] texts = autoSign.getSetting().getByName("text").<StringSetting>getSetting().getCurrent().split("/n");
             List<String> s = new ArrayList<>();
@@ -44,7 +45,6 @@ public abstract class SignEditScreenMixin {
                 }
             }
             text = s.toArray(new String[0]);
-            System.out.println(Arrays.toString(text));
             finishEditing();
         }
     }

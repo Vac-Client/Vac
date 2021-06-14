@@ -1,146 +1,174 @@
 package cn.enaium.vac.client.util
 
 import cn.enaium.vac.client.mc
-import net.minecraft.client.render.Camera
-import net.minecraft.entity.Entity
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gl.VertexBuffer
+import net.minecraft.client.render.*
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.opengl.GL11
 import java.awt.Color
+import java.awt.Color.*
 
 
 object Render3DUtil {
-
-    fun applyRenderOffset() {
-        applyCameraRotationOnly()
-        val camPos = getCameraPos()
-        GL11.glTranslated(-camPos.x, -camPos.y, -camPos.z)
-    }
-
-    fun applyCameraRotationOnly() {
-        val camera: Camera = mc.gameRenderer.camera
-        GL11.glRotated(MathHelper.wrapDegrees(camera.pitch).toDouble(), 1.0, 0.0, 0.0)
-        GL11.glRotated(MathHelper.wrapDegrees(camera.yaw + 180.0), 0.0, 1.0, 0.0)
-    }
 
     fun getCameraPos(): Vec3d {
         return mc.gameRenderer.camera.pos
     }
 
-    fun drawSolid(bb: Box) {
-        GL11.glBegin(GL11.GL_QUADS)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-        GL11.glEnd()
-    }
 
-
-    fun drawOutline(bb: Box) {
-        GL11.glBegin(GL11.GL_LINES)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ)
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ)
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ)
-        GL11.glEnd()
-    }
-
-    fun drawBox(entity: Entity, tickDelta: Float, color: Color, list: Int) {
-        GL11.glPushMatrix()
-        GL11.glTranslated(
-            entity.prevX + (entity.x - entity.prevX) * tickDelta,
-            entity.prevY + (entity.y - entity.prevY) * tickDelta,
-            entity.prevZ + (entity.z - entity.prevZ) * tickDelta
+    fun drawSolid(bb: Box, vertexBuffer: VertexBuffer) {
+        val bufferBuilder = Tessellator.getInstance().buffer
+        bufferBuilder.begin(
+            VertexFormat.DrawMode.QUADS,
+            VertexFormats.POSITION
         )
-        GL11.glScaled(
-            entity.width.toDouble(),
-            entity.height.toDouble(),
-            entity.width.toDouble()
+        drawSolid(bb, bufferBuilder)
+        bufferBuilder.end()
+        vertexBuffer.upload(bufferBuilder)
+    }
+
+    fun drawSolid(bb: Box, bufferBuilder: BufferBuilder) {
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
+    }
+
+
+    fun drawOutlined(bb: Box, vertexBuffer: VertexBuffer) {
+        val bufferBuilder = Tessellator.getInstance().buffer
+        bufferBuilder.begin(
+            VertexFormat.DrawMode.DEBUG_LINES,
+            VertexFormats.POSITION
         )
-        GL11.glColor4f(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
-        GL11.glCallList(list)
-        GL11.glPopMatrix()
+        drawOutline(bb, bufferBuilder)
+        bufferBuilder.end()
+        vertexBuffer.upload(bufferBuilder)
     }
 
-    fun drawBox(box: Box, color: Color, list: Int) {
-        GL11.glPushMatrix()
-        GL11.glTranslated(box.minX, box.minY, box.minZ)
-        GL11.glScaled(box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ)
-        GL11.glColor4f(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
-        GL11.glCallList(list)
-        GL11.glPopMatrix()
+    fun drawOutline(bb: Box, bufferBuilder: BufferBuilder) {
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).next()
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).next()
+        bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).next()
     }
 
-    fun settings() {
+    fun drawBox(matrixStack: MatrixStack, vertexBuffer: VertexBuffer, box: Box, color: Color) {
+        matrixStack.push()
+        val regionX: Int = (getCameraPos().getX().toInt() shr 9) * 512
+        val regionZ: Int = (getCameraPos().getZ().toInt() shr 9) * 512
+        RenderSystem.setShader(GameRenderer::getPositionShader)
+        matrixStack.translate(
+            box.minX - regionX, box.minY,
+            box.minZ - regionZ
+        )
+        matrixStack.scale(
+            (box.maxX - box.minX).toFloat(),
+            (box.maxY - box.minY).toFloat(), (box.maxZ - box.minZ).toFloat()
+        )
+
+        val r = color.red.toFloat() / 255.0f
+        val g = color.green.toFloat() / 255.0f
+        val b = color.blue.toFloat() / 255.0f
+        val a = color.alpha.toFloat() / 255.0f
+        RenderSystem.setShaderColor(r, g, b, a)
+
+        val viewMatrix = matrixStack.peek().model
+        val projMatrix = RenderSystem.getProjectionMatrix()
+        val shader = RenderSystem.getShader()
+
+
+        vertexBuffer.setShader(viewMatrix, projMatrix, shader)
+        matrixStack.pop()
+    }
+
+    fun applyRegionalRenderOffset(matrixStack: MatrixStack) {
+        val camPos = getCameraPos()
+        val blockPos: BlockPos = mc.blockEntityRenderDispatcher.camera.blockPos
+        val regionX = (blockPos.x shr 9) * 512
+        val regionZ = (blockPos.z shr 9) * 512
+
+        matrixStack.translate(
+            regionX - camPos.x, -camPos.y,
+            regionZ - camPos.z
+        )
+    }
+
+    fun settings(matrixStack: MatrixStack) {
         GL11.glEnable(GL11.GL_BLEND)
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
         GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GL11.glLineWidth(2f)
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
+        GL11.glEnable(GL11.GL_CULL_FACE)
         GL11.glDisable(GL11.GL_DEPTH_TEST)
-        GL11.glDisable(GL11.GL_LIGHTING)
-        GL11.glPushMatrix()
-        applyRenderOffset()
+        matrixStack.push()
+        applyRegionalRenderOffset(matrixStack)
     }
 
-    fun resets() {
-        GL11.glPopMatrix()
-        GL11.glColor4f(1f, 1f, 1f, 1f)
+    fun resets(matrixStack: MatrixStack) {
+        matrixStack.pop();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
         GL11.glEnable(GL11.GL_DEPTH_TEST)
-        GL11.glEnable(GL11.GL_TEXTURE_2D)
         GL11.glDisable(GL11.GL_BLEND)
         GL11.glDisable(GL11.GL_LINE_SMOOTH)
     }

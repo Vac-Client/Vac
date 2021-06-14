@@ -12,7 +12,7 @@ import net.minecraft.client.util.math.MatrixStack
  */
 open class SettingPanel(val setting: SettingProvider, var x: Int = 0, var y: Int = 0) : Drawable, Element {
 
-    val height = FontUtil.height + 10
+    val height = FontUtil.height + 5
     var hovered = false
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

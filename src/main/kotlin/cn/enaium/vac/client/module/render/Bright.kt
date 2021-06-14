@@ -25,7 +25,7 @@ class Bright {
 
     @Event
     fun onMotion(motioningEvent: MotioningEvent) {
-        CF4M.MODULE.getByInstance(this).getExtend<Mod>().tag = mode.current
+        CF4M.MODULE.getByInstance(this).getExtend(Mod::class.java).tag = mode.current
         when (mode.current) {
             "Gamma" -> mc.options.gamma = 300.0
             "NightVision" -> mc.player!!.addStatusEffect(

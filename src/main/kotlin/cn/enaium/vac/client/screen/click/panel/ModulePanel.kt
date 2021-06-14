@@ -40,7 +40,7 @@ class ModulePanel(private val module: ModuleProvider, var x: Int, var y: Int) : 
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        val height = FontUtil.height + 10
+        val height = FontUtil.height + 5
         hovered = Render2DUtil.isHovered(mouseX, mouseY, x, y, getMaxModule(), height)
         Render2DUtil.drawRectWH(
             matrices,
@@ -73,7 +73,7 @@ class ModulePanel(private val module: ModuleProvider, var x: Int, var y: Int) : 
                 it.x = x + getMaxModule()
                 it.y = settingY
                 it.render(matrices, mouseX, mouseY, delta)
-                settingY += FontUtil.height + 10
+                settingY += height
             }
         }
     }

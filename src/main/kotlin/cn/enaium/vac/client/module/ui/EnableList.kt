@@ -39,7 +39,7 @@ class EnableList : UI() {
     }
 
     private fun getText(module: ModuleProvider): String {
-        val extend = module.getExtend<Mod>()
+        val extend = module.getExtend(Mod::class.java)
         if (extend.tag != null) {
             return "${module.name}[${extend.tag}]"
         }

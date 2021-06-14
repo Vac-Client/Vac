@@ -35,6 +35,8 @@ class RenderTooltipEvent(
     val y: Int
 )
 
+class AttackEvent
+
 open class Cancel {
     var cancel: Boolean = false
 }

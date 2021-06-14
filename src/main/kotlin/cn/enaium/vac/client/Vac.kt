@@ -4,6 +4,7 @@ import cn.enaium.cf4m.CF4M
 import cn.enaium.vac.client.util.KeyboardUtil
 import cn.enaium.vac.mixin.IClientPlayerInteractionManagerMixin
 import cn.enaium.vac.mixin.IMinecraftClientMixin
+import cn.enaium.vac.mixin.IWorldMixin
 import net.minecraft.client.MinecraftClient
 
 /**
@@ -28,6 +29,9 @@ class Vac
 object IMinecraftClient {
     val instance
         get() = MinecraftClient.getInstance() as IMinecraftClientMixin
+
+    val world
+        get() = MinecraftClient.getInstance().world as IWorldMixin
 
     val interactionManager
         get() = mc.interactionManager as IClientPlayerInteractionManagerMixin

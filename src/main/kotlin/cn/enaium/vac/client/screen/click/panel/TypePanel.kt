@@ -51,7 +51,7 @@ class TypePanel(private val type: String, private var x: Int, private var y: Int
                 it.x = x + getMaxType() / 2 - getMaxModule() / 2
                 it.y = moduleY
                 it.render(matrices, mouseX, mouseY, delta)
-                moduleY += FontUtil.height + 10
+                moduleY += FontUtil.height + 5
             }
         }
     }

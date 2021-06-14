@@ -3,6 +3,7 @@ package cn.enaium.vac.client.screen.click
 import cn.enaium.vac.client.mc
 import cn.enaium.vac.client.screen.widget.ItemListWidget
 import cn.enaium.vac.client.screen.widget.ListWidget
+import cn.enaium.vac.client.setting.BlockEntityListSetting
 import cn.enaium.vac.client.setting.BlockListSetting
 import cn.enaium.vac.client.setting.ItemListSetting
 import net.minecraft.client.gui.screen.Screen
@@ -28,21 +29,25 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
 
 
         removeButton = ButtonWidget(width - 55, 5, 50, 20, LiteralText("Remove")) {
-            entryListWidget.children().remove(entryListWidget.selected)
-            itemListSetting.all.remove(entryListWidget.selected!!.name)
+            entryListWidget.children().remove(entryListWidget.selectedOrNull)
+            itemListSetting.all.remove(entryListWidget.selectedOrNull!!.name)
         }
 
         textFieldWidget = TextFieldWidget(mc.textRenderer, 5, height - 30, 50, 20, LiteralText(""))
-        addButton(ButtonWidget(60, height - 30, 50, 20, LiteralText("All")) {
+        addDrawable(ButtonWidget(60, height - 30, 50, 20, LiteralText("All")) {
             mc.openScreen(
                 ItemAllList(
                     this,
-                    if (itemListSetting is BlockListSetting) ItemAllList.Type.BLOCK else ItemAllList.Type.ITEM
+                    when (itemListSetting) {
+                        is BlockListSetting -> ItemAllList.Type.BLOCK
+                        is BlockEntityListSetting -> ItemAllList.Type.BLOCK_ENTITY
+                        else -> ItemAllList.Type.ITEM
+                    }
                 )
             )
 
         })
-        addButton(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
+        addDrawable(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
             try {
                 var clipboard = mc.keyboard.clipboard.lowercase()
                 if (Registry.ITEM.containsId(Identifier(clipboard)) && textFieldWidget.text.isEmpty()) {
@@ -60,9 +65,9 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
             }
         })
 
-        addButton(removeButton)
-        addChild(entryListWidget)
-        addChild(textFieldWidget)
+        addDrawable(removeButton)
+        addDrawable(entryListWidget)
+        addDrawable(textFieldWidget)
         super.init()
     }
 
@@ -81,7 +86,7 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
-        removeButton.active = entryListWidget.selected != null
+        removeButton.active = entryListWidget.selectedOrNull != null
         entryListWidget.render(matrices, mouseX, mouseY, delta)
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         super.render(matrices, mouseX, mouseY, delta)

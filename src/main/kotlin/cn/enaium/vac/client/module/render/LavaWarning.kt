@@ -47,7 +47,7 @@ class LavaWarning : Render(BoxType.BLOCK, DrawType.OUTLINE) {
             if (block == Blocks.LAVA) {
                 mc.inGameHud.setOverlayMessage(LiteralText("There is lava nearby"), false)
                 if (render.enable) {
-                    drawBox(Box(pos), Color.RED, this)
+                    drawBox(render3DEvent.matrixStack, Box(pos), Color.RED, this)
                 }
             }
         }

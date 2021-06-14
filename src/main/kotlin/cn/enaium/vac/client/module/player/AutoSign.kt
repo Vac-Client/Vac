@@ -14,6 +14,6 @@ import net.minecraft.client.gui.screen.DeathScreen
  */
 @Module("AutoSign", type = PLAYER)
 class AutoSign {
-    @Setting("text")
+    @Setting("text", description = "/n wrap")
     val text = StringSetting("Vac Client/nByEnaium")
 }

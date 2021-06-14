@@ -24,18 +24,18 @@ class EntityAllList(private val entityList: EntityList) : Screen(LiteralText("")
         }
 
         buttonWidget = ButtonWidget(width / 2 - 25, height - 30, 50, 20, LiteralText("Add")) {
-            entityList.entityListSetting.all.add(entryListWidget.selected!!.entityType.lootTableId.path)
+            entityList.entityListSetting.all.add(entryListWidget.selectedOrNull!!.entityType.lootTableId.path)
             mc.openScreen(entityList)
         }
 
-        addChild(entryListWidget)
-        addButton(buttonWidget)
+        addDrawable(entryListWidget)
+        addDrawable(buttonWidget)
         super.init()
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         entryListWidget.render(matrices, mouseX, mouseY, delta)
-        buttonWidget.active = entryListWidget.selected != null
+        buttonWidget.active = entryListWidget.selectedOrNull != null
         super.render(matrices, mouseX, mouseY, delta)
     }
 }

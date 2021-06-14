@@ -28,14 +28,14 @@ class EntityList(val entityListSetting: EntityListSetting) : Screen(LiteralText(
         }
 
         removeButton = ButtonWidget(width - 55, 5, 50, 20, LiteralText("Remove")) {
-            entryListWidget.children().remove(entryListWidget.selected)
-            entityListSetting.all.remove(entryListWidget.selected!!.entityType.lootTableId.path)
+            entryListWidget.children().remove(entryListWidget.selectedOrNull)
+            entityListSetting.all.remove(entryListWidget.selectedOrNull!!.entityType.lootTableId.path)
         }
-        addButton(ButtonWidget(5, 5, 50, 20, LiteralText("All")) {
+        addDrawable(ButtonWidget(5, 5, 50, 20, LiteralText("All")) {
             mc.openScreen(EntityAllList(this))
         })
-        addChild(entryListWidget)
-        addButton(removeButton)
+        addDrawable(entryListWidget)
+        addDrawable(removeButton)
         super.init()
     }
 
@@ -43,7 +43,7 @@ class EntityList(val entityListSetting: EntityListSetting) : Screen(LiteralText(
         renderBackground(matrices)
         entryListWidget.render(matrices, mouseX, mouseY, delta)
 
-        removeButton.active = entryListWidget.selected != null
+        removeButton.active = entryListWidget.selectedOrNull != null
 
         super.render(matrices, mouseX, mouseY, delta)
     }

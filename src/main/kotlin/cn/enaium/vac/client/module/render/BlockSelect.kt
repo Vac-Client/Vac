@@ -18,7 +18,7 @@ class BlockSelect : Render(BoxType.BLOCK, DrawType.OUTLINE) {
     @Event
     fun render(render3DEvent: Render3DEvent) {
         if (mc.crosshairTarget!!.type == HitResult.Type.BLOCK) {
-            drawBox(
+            drawBox(render3DEvent.matrixStack,
                 BlockUtil.getBoundingBox((mc.crosshairTarget as BlockHitResult).blockPos),
                 Color.BLUE,
                 this

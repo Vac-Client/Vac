@@ -4,6 +4,7 @@ import cn.enaium.cf4m.CF4M
 import cn.enaium.cf4m.annotation.Event
 import cn.enaium.cf4m.annotation.module.Module
 import cn.enaium.cf4m.annotation.module.Setting
+import cn.enaium.vac.client.event.AttackEvent
 import cn.enaium.vac.client.event.MotioningEvent
 import cn.enaium.vac.client.mc
 import cn.enaium.vac.client.module.COMBAT
@@ -24,8 +25,12 @@ class Critical {
     private val mode = ModeSetting("Packet", arrayListOf("Packet", "LowJump", "Jump"))
 
     @Event
-    fun onMotion(motioningEvent: MotioningEvent) {
-        CF4M.MODULE.getByInstance(this).getExtend<Mod>().tag = mode.current
+    fun onAttack(attackEvent: AttackEvent) {
+        CF4M.MODULE.getByInstance(this).getExtend(Mod::class.java).tag = mode.current
+        critical()
+    }
+
+    fun critical() {
         if (mc.crosshairTarget == null || mc.crosshairTarget!!.type != HitResult.Type.ENTITY || (mc.crosshairTarget as EntityHitResult).entity !is LivingEntity)
             return
 
@@ -59,7 +64,7 @@ class Critical {
 
     private fun sendPos(x: Double, y: Double, z: Double, onGround: Boolean) {
         mc.player!!.networkHandler.sendPacket(
-            PlayerMoveC2SPacket.PositionOnly(x, y, z, onGround)
+            PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, onGround)
         )
     }
 }

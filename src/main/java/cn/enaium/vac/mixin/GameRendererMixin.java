@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 class GameRendererMixin {
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", ordinal = 0), method = "renderWorld")
     private void renderWorld(float tickDelta, long limitTime, MatrixStack matrixStack, CallbackInfo ci) {
-        Render3DUtil.INSTANCE.settings();
+        Render3DUtil.INSTANCE.settings(matrixStack);
         CF4M.EVENT.post(new Render3DEvent(tickDelta, limitTime, matrixStack));
-        Render3DUtil.INSTANCE.resets();
+        Render3DUtil.INSTANCE.resets(matrixStack);
     }
 }

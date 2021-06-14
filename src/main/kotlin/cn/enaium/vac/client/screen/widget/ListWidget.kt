@@ -1,6 +1,7 @@
 package cn.enaium.vac.client.screen.widget
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.EntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 
@@ -17,9 +18,9 @@ class ListWidget<T : ListWidget.Entry<T>>(
 ) : EntryListWidget<T>(client, width, height, top, bottom, itemHeight) {
     private fun setSelectedItem(index: Int) {
         if (index == -1) {
-            selected = null
+            setSelected(null)
         } else if (super.getEntryCount() != 0) {
-            selected = getEntry(index)
+            setSelected(getEntry(index))
         }
     }
 
@@ -30,6 +31,10 @@ class ListWidget<T : ListWidget.Entry<T>>(
             }
         }
         return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun appendNarrations(builder: NarrationMessageBuilder) {
+
     }
 
     public override fun addEntry(entry: T): Int {

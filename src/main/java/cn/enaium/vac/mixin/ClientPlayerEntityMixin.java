@@ -58,6 +58,12 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Final
     protected MinecraftClient client;
 
+    @Shadow
+    public abstract float getYaw(float tickDelta);
+
+    @Shadow
+    public abstract float getPitch(float tickDelta);
+
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
@@ -74,7 +80,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
      */
     @Overwrite
     private void sendMovementPackets() {
-        MotioningEvent motioningEvent = new MotioningEvent(this.yaw, this.pitch, this.onGround, new Vec3d(this.getX(), this.getY(), this.getZ()));
+        MotioningEvent motioningEvent = new MotioningEvent(this.getYaw(), this.getPitch(), this.onGround, new Vec3d(this.getX(), this.getY(), this.getZ()));
         CF4M.EVENT.post(motioningEvent);
         boolean bl = this.isSprinting();
         if (bl != this.lastSprinting) {
@@ -107,21 +113,21 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             boolean bl3 = d * d + e * e + f * f > 9.0E-4D || this.ticksSinceLastPositionPacketSent >= 20;
             boolean bl4 = g != 0.0D || h != 0.0D;
 
-            this.yaw = motionEventYaw;
-            this.pitch = motionEventPitch;
+            this.setYaw(motionEventYaw);
+            this.setPitch(motionEventPitch);
             this.onGround = motionEventGround;
             if (this.hasVehicle()) {
                 Vec3d vec3d = this.getVelocity();
-                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.Both(vec3d.x, -999.0D, vec3d.z, this.yaw, this.pitch, this.onGround));
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(vec3d.x, -999.0D, vec3d.z, this.getYaw(), this.getPitch(), this.onGround));
                 bl3 = false;
             } else if (bl3 && bl4) {
-                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.Both(this.getX(), this.getY(), this.getZ(), this.yaw, this.pitch, this.onGround));
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), this.onGround));
             } else if (bl3) {
-                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(this.getX(), this.getY(), this.getZ(), this.onGround));
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(this.getX(), this.getY(), this.getZ(), this.onGround));
             } else if (bl4) {
-                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(this.yaw, this.pitch, this.onGround));
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(this.getYaw(), this.getPitch(), this.onGround));
             } else if (this.lastOnGround != this.onGround) {
-                this.networkHandler.sendPacket(new PlayerMoveC2SPacket(this.onGround));
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(this.onGround));
             }
 
             if (bl3) {
@@ -133,13 +139,13 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
             if (bl4) {
                 this.lastYaw = motionEventYaw;
-                this.lastPitch = this.pitch;
+                this.lastPitch = motionEventPitch;
             }
 
             this.lastOnGround = motioningEvent.getGround();
             this.autoJumpEnabled = this.client.options.autoJump;
         }
-        CF4M.EVENT.post(new MotionedEvent(this.yaw, this.pitch, this.onGround, new Vec3d(this.getX(), this.getY(), this.getZ())));
+        CF4M.EVENT.post(new MotionedEvent(this.getYaw(), this.getPitch(), this.onGround, new Vec3d(this.getX(), this.getY(), this.getZ())));
     }
 
     @Redirect(at = @At(value = "INVOKE",
