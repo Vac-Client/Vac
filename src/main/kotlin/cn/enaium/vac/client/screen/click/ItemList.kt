@@ -34,7 +34,8 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
         }
 
         textFieldWidget = TextFieldWidget(mc.textRenderer, 5, height - 30, 50, 20, LiteralText(""))
-        addDrawable(ButtonWidget(60, height - 30, 50, 20, LiteralText("All")) {
+        addDrawableChild(entryListWidget)
+        addDrawableChild(ButtonWidget(60, height - 30, 50, 20, LiteralText("All")) {
             mc.openScreen(
                 ItemAllList(
                     this,
@@ -47,7 +48,7 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
             )
 
         })
-        addDrawable(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
+        addDrawableChild(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
             try {
                 var clipboard = mc.keyboard.clipboard.lowercase()
                 if (Registry.ITEM.containsId(Identifier(clipboard)) && textFieldWidget.text.isEmpty()) {
@@ -65,9 +66,8 @@ class ItemList(val itemListSetting: ItemListSetting) : Screen(LiteralText("")) {
             }
         })
 
-        addDrawable(removeButton)
-        addDrawable(entryListWidget)
-        addDrawable(textFieldWidget)
+        addDrawableChild(removeButton)
+        addDrawableChild(textFieldWidget)
         super.init()
     }
 

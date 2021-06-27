@@ -28,8 +28,8 @@ class EntityAllList(private val entityList: EntityList) : Screen(LiteralText("")
             mc.openScreen(entityList)
         }
 
-        addDrawable(entryListWidget)
-        addDrawable(buttonWidget)
+        addDrawableChild(entryListWidget)
+        addDrawableChild(buttonWidget)
         super.init()
     }
 

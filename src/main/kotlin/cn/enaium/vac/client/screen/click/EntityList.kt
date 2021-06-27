@@ -31,11 +31,11 @@ class EntityList(val entityListSetting: EntityListSetting) : Screen(LiteralText(
             entryListWidget.children().remove(entryListWidget.selectedOrNull)
             entityListSetting.all.remove(entryListWidget.selectedOrNull!!.entityType.lootTableId.path)
         }
-        addDrawable(ButtonWidget(5, 5, 50, 20, LiteralText("All")) {
+        addDrawableChild(entryListWidget)
+        addDrawableChild(ButtonWidget(5, 5, 50, 20, LiteralText("All")) {
             mc.openScreen(EntityAllList(this))
         })
-        addDrawable(entryListWidget)
-        addDrawable(removeButton)
+        addDrawableChild(removeButton)
         super.init()
     }
 

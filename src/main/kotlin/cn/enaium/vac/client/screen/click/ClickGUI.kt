@@ -28,7 +28,7 @@ class ClickGUI : Screen(LiteralText("")) {
     }
 
     override fun init() {
-        addDrawable(ButtonWidget(0, height - 20, 50, 20, LiteralText("Design")) {
+        addDrawableChild(ButtonWidget(0, height - 20, 50, 20, LiteralText("Design")) {
             mc.openScreen(Design())
         })
         super.init()

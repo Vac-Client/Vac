@@ -56,10 +56,10 @@ class BlockESP : Render(BoxType.BLOCK, DrawType.OUTLINE) {
 
                 val chunkPos = it.pos
                 val minX = chunkPos.startX
-                val minY = 0
+                val minY = -64
                 val minZ = chunkPos.startZ
                 val maxX = chunkPos.endX
-                val maxY = 255
+                val maxY = 319
                 val maxZ = chunkPos.endZ
 
                 for (x in minX..maxX) for (y in minY..maxY) for (z in minZ..maxZ) {

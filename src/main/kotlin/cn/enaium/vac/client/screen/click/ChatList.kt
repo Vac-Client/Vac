@@ -29,7 +29,7 @@ class ChatList(private val chatListSetting: ChatListSetting) : Screen(LiteralTex
         keyTextField = TextFieldWidget(mc.textRenderer, 5, height - 30, 20, 20, LiteralText(""))
         chatTextField = TextFieldWidget(mc.textRenderer, 35, height - 30, 100, 20, LiteralText(""))
 
-        addDrawable(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
+        addDrawableChild(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
             if (keyTextField.text.isNotEmpty() && chatTextField.text.isNotEmpty()) {
                 val key = KeyboardUtil.getKey(keyTextField.text)
                 if (key != -1) {
@@ -44,9 +44,9 @@ class ChatList(private val chatListSetting: ChatListSetting) : Screen(LiteralTex
             chatListSetting.all.remove(entryListWidget.selectedOrNull!!.pair)
         }
 
-        addDrawable(removeButton)
-        addDrawable(keyTextField)
-        addDrawable(chatTextField)
+        addDrawableChild(removeButton)
+        addDrawableChild(keyTextField)
+        addDrawableChild(chatTextField)
         super.init()
     }
 

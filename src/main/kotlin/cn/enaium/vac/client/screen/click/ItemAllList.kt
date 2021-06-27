@@ -45,8 +45,8 @@ class ItemAllList(private val itemList: ItemList, private val type: Type) : Scre
             itemList.itemListSetting.all.add("minecraft:" + entryListWidget.selectedOrNull!!.name)
             mc.openScreen(itemList)
         }
-        addDrawable(buttonWidget)
-        addDrawable(entryListWidget)
+        addDrawableChild(buttonWidget)
+        addDrawableChild(entryListWidget)
         super.init()
     }
 

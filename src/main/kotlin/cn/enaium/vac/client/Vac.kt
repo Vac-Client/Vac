@@ -6,6 +6,7 @@ import cn.enaium.vac.mixin.IClientPlayerInteractionManagerMixin
 import cn.enaium.vac.mixin.IMinecraftClientMixin
 import cn.enaium.vac.mixin.IWorldMixin
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.util.Session
 
 /**
  * @author Enaium
@@ -20,6 +21,7 @@ fun run() {
 
 val mc = MinecraftClient.getInstance()!!
 val imc = IMinecraftClient
+var session: Session? = null
 
 const val VAC_NAME = "Vac"
 const val VAC_VERSION = "1.0"

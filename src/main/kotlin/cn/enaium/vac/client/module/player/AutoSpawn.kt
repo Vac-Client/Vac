@@ -21,7 +21,7 @@ class AutoSpawn {
     @Setting("CloseDeath", description = "Close death screen")
     private val close = EnableSetting(true)
 
-    @Setting("Y", description = "Y is below 0")
+    @Setting("Y", description = "Y is below -64")
     private val y = EnableSetting(true)
 
     @Setting("Command")
@@ -45,7 +45,7 @@ class AutoSpawn {
             return
         }
 
-        if (mc.player!!.blockPos.y < 0) {
+        if (mc.player!!.blockPos.y < -64) {
             mc.player!!.sendChatMessage(command.current)
         }
     }

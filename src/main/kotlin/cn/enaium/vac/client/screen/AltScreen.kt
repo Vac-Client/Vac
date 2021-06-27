@@ -1,6 +1,8 @@
 package cn.enaium.vac.client.screen
 
+import cn.enaium.vac.client.imc
 import cn.enaium.vac.client.mc
+import cn.enaium.vac.client.session
 import cn.enaium.vac.mixin.IMinecraftClientMixin
 import com.mojang.authlib.Agent
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
@@ -33,14 +35,14 @@ class AltScreen : Screen(LiteralText("")) {
         super.init()
         usernameField = TextFieldWidget(textRenderer, width / 2 - 250 / 2, 5, 250, 20, LiteralText(""))
         passwordField = TextFieldWidget(textRenderer, width / 2 - 250 / 2, 35, 250, 20, LiteralText(""))
-        addDrawable(ButtonWidget(width / 2 - 250 / 2, 40 * 3, 250, 20, LiteralText("Login")) {
+        addDrawableChild(ButtonWidget(width / 2 - 250 / 2, 40 * 3, 250, 20, LiteralText("Login")) {
             login()
         })
-        addDrawable(ButtonWidget(width / 2 - 250 / 2, 40 * 3 + 25 * 2, 250, 20, LiteralText("Back")) {
+        addDrawableChild(ButtonWidget(width / 2 - 250 / 2, 40 * 3 + 25 * 2, 250, 20, LiteralText("Back")) {
             mc.openScreen(null)
         })
-        addDrawable(usernameField)
-        addDrawable(passwordField)
+        addDrawableChild(usernameField)
+        addDrawableChild(passwordField)
     }
 
     override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
@@ -55,8 +57,7 @@ class AltScreen : Screen(LiteralText("")) {
 
     private fun login() {
         try {
-            (mc as IMinecraftClientMixin).session =
-                createSession(usernameField.text, passwordField.text, Proxy.NO_PROXY)
+            session = createSession(usernameField.text, passwordField.text, Proxy.NO_PROXY)
             mc.openScreen(null)
         } catch (e: Exception) {
             mc.openScreen(FatalErrorScreen(LiteralText("Login Error"), LiteralText(e.message)))

@@ -26,8 +26,8 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(at = @At("RETURN"), method = "init()V")
     private void init(CallbackInfo callbackInfo) {
-        addDrawable(new ButtonWidget(5, 5, 20, 20, new LiteralText("Alt"), button -> MinecraftClient.getInstance().openScreen(new AltScreen())));
-        addDrawable(new ButtonWidget(35, 5, 40, 20, new LiteralText("Credit"), button -> {
+        addDrawableChild(new ButtonWidget(5, 5, 20, 20, new LiteralText("Alt"), button -> MinecraftClient.getInstance().openScreen(new AltScreen())));
+        addDrawableChild(new ButtonWidget(35, 5, 40, 20, new LiteralText("Credit"), button -> {
             CreditScreen.INSTANCE.setCredit(true);
             MinecraftClient.getInstance().openScreen(new CreditsScreen(false, () -> {
             }));
