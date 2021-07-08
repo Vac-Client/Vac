@@ -28,7 +28,7 @@ class ChatList(private val chatListSetting: ChatListSetting) : Screen(LiteralTex
 
         keyTextField = TextFieldWidget(mc.textRenderer, 5, height - 30, 20, 20, LiteralText(""))
         chatTextField = TextFieldWidget(mc.textRenderer, 35, height - 30, 100, 20, LiteralText(""))
-
+        addDrawableChild(entryListWidget)
         addDrawableChild(ButtonWidget(5, 5, 50, 20, LiteralText("Add")) {
             if (keyTextField.text.isNotEmpty() && chatTextField.text.isNotEmpty()) {
                 val key = KeyboardUtil.getKey(keyTextField.text)
