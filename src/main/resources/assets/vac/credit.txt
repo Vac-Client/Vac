@@ -11,3 +11,6 @@
 
 §f          Alexander01998  Wurst
 §e          https://github.com/Wurst-Imperium/Wurst7
+
+§f          MCPfannkuchenYT NBS-Fabric
+§e          https://github.com/MCPfannkuchenYT/NBS-Fabric
