@@ -50,6 +50,11 @@ class ClickGUI : Screen(LiteralText("")) {
         return super.mouseReleased(mouseX, mouseY, button)
     }
 
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        typeList.forEach { it.mouseScrolled(mouseX, mouseY, amount) }
+        return super.mouseScrolled(mouseX, mouseY, amount)
+    }
+
     override fun isPauseScreen(): Boolean {
         return false
     }

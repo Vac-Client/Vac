@@ -76,4 +76,9 @@ class TypePanel(private val type: String, private var x: Int, private var y: Int
         dragging = false
         return super.mouseReleased(mouseX, mouseY, button)
     }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        y += amount.toInt() * 20
+        return super.mouseScrolled(mouseX, mouseY, amount)
+    }
 }
